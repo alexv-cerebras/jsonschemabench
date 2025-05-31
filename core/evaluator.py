@@ -15,6 +15,53 @@ from core.types import (
 )
 
 
+categories = [
+    "additionalProperties",
+    "allOf",
+    "anchor",
+    "anyOf",
+    "boolean_schema",
+    "const",
+    "contains",
+    "content",
+    "default",
+    "defs",
+    "dependentRequired",
+    "dependentSchemas",
+    "dynamicRef",
+    "enum",
+    "exclusiveMaximum",
+    "exclusiveMinimum",
+    "if-then-else",
+    "infinite-loop-detection",
+    "items",
+    "maxContains",
+    "maxItems",
+    "maxLength",
+    "maxProperties",
+    "maximum",
+    "minContains",
+    "minItems",
+    "minLength",
+    "minProperties",
+    "minimum",
+    "multipleOf",
+    "not",
+    "oneOf",
+    "pattern",
+    "patternProperties",
+    "prefixItems",
+    "properties",
+    "propertyNames",
+    "ref",
+    "required",
+    "type",
+    "unevaluatedItems",
+    "unevaluatedProperties",
+    "uniqueItems",
+]
+
+
 def is_json_schema_valid(schema: Schema):
     try:
         Draft202012Validator.check_schema(schema)
@@ -60,10 +107,13 @@ def evaluate(
     output_tokens_list = []
     declared_coverage_list = []
     empirical_coverage_list = []
+    categories_coverage_list, categories_coverage_dict = [], {}
 
     for generation_output in outputs:
         generation = generation_output.generation
-        schema = generation_output.schema
+        schema = generation_output.schema 
+        cur_categories = [category for category in categories if category in generation]
+        categories_coverage_list.append(cur_categories)
 
         if schema is None or generation is None:
             continue
@@ -85,6 +135,15 @@ def evaluate(
 
         empirical_coverage_list.append(1)
         output_tokens_list.append(generation_output.token_usage.output_tokens)
+        
+    for i, label in enumerate(empirical_coverage_list):
+        for cat in categories_coverage_list[i]:
+            categories_coverage_dict[cat] = categories_coverage_dict.get(cat, []) + [label]
+            
+    for cat, values in categories_coverage_dict.items():
+        categories_coverage_dict[cat] = sum(values) / len(values) if values else 0
+        
+    print(categories_coverage_dict)
 
     ttft_list = [
         generation_output.perf_metrics.ttft
