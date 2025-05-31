@@ -27,6 +27,7 @@ DATASET_NAMES = [
 @dataclass
 class DatasetConfig:
     dataset_name: str
+    hf_token: Optional[str] = None
     limit: Optional[int] = None
 
 
@@ -39,7 +40,8 @@ class Dataset:
         """
         self.config = config
         self.dataset = load_dataset(
-            path=DATASET_HUGGINGFACE_PATH, name=config.dataset_name, split="test"
+            path=DATASET_HUGGINGFACE_PATH, name=config.dataset_name, split="test",
+            token=config.hf_token, download_mode="force_redownload"
         )
 
     def __len__(self):

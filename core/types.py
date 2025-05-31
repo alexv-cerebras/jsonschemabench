@@ -1,7 +1,7 @@
 import numpy as np
 from enum import Enum
 from uuid import uuid4
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from typing import List, Dict, Any, Optional
 
 from core.messages import Message
@@ -11,25 +11,25 @@ from core.utils import safe_divide, safe_subtract, safe_reduce
 Schema = Dict[str, Any]
 
 
-class CompileStatusCode(int, Enum):
-    TBD = -1
-    OK = 0
-    UNSUPPORTED_SCHEMA = 1
-    RUNTIME_GRAMMAR_ERROR = 2
-    API_BAD_RESPONSE = 3
-    PROMPT_TOO_LONG = 4
-    COMPILE_TIMEOUT = 5
-    RUNTIME_TIMEOUT = 6
-    UNKOWN_ERROR = 7
+class CompileStatusCode(str, Enum):
+    TBD = "tbd" #-1
+    OK = "ok" #0
+    UNSUPPORTED_SCHEMA = "unsupported_schema"
+    RUNTIME_GRAMMAR_ERROR = "runtime_grammar_error"
+    API_BAD_RESPONSE = "api_bad_response"
+    PROMPT_TOO_LONG = "prompt_too_long"
+    COMPILE_TIMEOUT = "compile_timeout"
+    RUNTIME_TIMEOUT = "runtime_timeout"
+    UNKOWN_ERROR = "unknown_error"
 
 
-class DecodingStatusCode(int, Enum):
-    TBD = -1
-    OK = 0
-    EXCEEDING_MAX_CTX = 1
-    DECODING_TIMEOUT = 2
-    BAD_API_RESPONSE = 3
-    UNKOWN_ERROR = 4
+class DecodingStatusCode(str, Enum):
+    TBD = "tbd"
+    OK = "ok"
+    EXCEEDING_MAX_CTX = "exceeding_max_ctx"
+    DECODING_TIMEOUT = "decoding_timeout"
+    BAD_API_RESPONSE = "bad_api_response"
+    UNKOWN_ERROR = "unknown_error"
 
 
 @dataclass

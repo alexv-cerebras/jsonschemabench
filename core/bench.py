@@ -20,6 +20,7 @@ def bench(
     messages_formatter: Union[
         MessagesFormatter, List[MessagesFormatter]
     ] = FEW_SHOTS_MESSAGES_FORMATTER,
+    hf_token: Optional[str] = None,
     close_engine: bool = True,
     save_outputs: bool = False,
 ) -> List[List[GenerationOutput]]:
@@ -36,6 +37,8 @@ def bench(
         function is provided, it will be used for all tasks. If a list of
         functions is provided, each function will be used for the corresponding
         task.
+    :param hf_token: Optional[str]
+        The Hugging Face token to use for loading datasets.
     :param close_engine: bool
         Whether to close the engine after the benchmark.
     :param save_outputs: bool
@@ -59,10 +62,9 @@ def bench(
             desc=task,
             file=sys.stdout,
         ):
-            with disable_print():
-                schema = engine.adapt_schema(schema)
-                result = engine.generate(task, messages, schema)
-                task_outputs.append(result)
+            schema = engine.adapt_schema(schema)
+            result = engine.generate(task, messages, schema)
+            task_outputs.append(result)
         all_outputs.append(task_outputs)
 
     compliance = []
