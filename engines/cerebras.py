@@ -67,7 +67,7 @@ def _send_request(url, method, params=None, headers=None, req_timeout=5):
 class CerebrasConfig(EngineConfig):
     model: str
     base_url: str
-    max_tokens: Optional[int] = None
+    max_tokens: int
     temperature: Optional[float] = None
     run_timeout: Optional[int] = None
 
@@ -167,9 +167,7 @@ class CerebrasEngine(Engine[CerebrasConfig]):
 
     @cached_property
     def max_context_length(self):
-        url = f'{self.config.base_url}/config/model/{self.config.model}'
-        model_config = _send_request(url, 'get')
-        return model_config.get('max_context', 32768)
+        return self.config.max_tokens
 
 def add_root_type_if_missing(schema: dict):
     if "type" not in schema:

@@ -22,8 +22,14 @@ COMPILATION_TIMEOUT = 10
 T = TypeVar("T")
 
 
-def load_config(config_type: Type[T], config_path: str) -> T:
-    return from_dict(data_class=config_type, data=OmegaConf.load(config_path))
+def load_config(config_type: Type[T], config_path: str, config_kwargs: dict) -> T:
+    cfg = OmegaConf.load(config_path)
+    try:
+        cfg = OmegaConf.merge(cfg, config_kwargs)
+    except:
+        print("Config kwargs are not compatible with the config file.")
+        pass
+    return from_dict(data_class=config_type, data=cfg)
 
 
 def safe_divide(a: Optional[float], b: Optional[float]) -> Optional[float]:

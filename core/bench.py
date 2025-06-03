@@ -4,6 +4,7 @@ from tqdm import tqdm
 from json import dumps
 from dataclasses import asdict
 from typing import List, Optional, Union
+from glob import glob
 
 from core.engine import Engine
 from core.evaluator import evaluate
@@ -47,8 +48,6 @@ def bench(
     :return: List[List[GenerationOutput]]
         The generation outputs for each sample for each task.
     """
-    id = nanoid()
-
     if not isinstance(messages_formatter, list):
         messages_formatter = [messages_formatter] * len(tasks)
 
@@ -96,7 +95,8 @@ def bench(
 
         if not os.path.exists(f"outputs/{engine.name}"):
             os.makedirs(f"outputs/{engine.name}")
-
+            
+        id: int = len(glob(f"outputs/{engine.name}/*.jsonl"))
         with open(f"outputs/{engine.name}/{id}.jsonl", "w") as f:
             f.write(
                 f"{dumps({'engine': engine.name, 'engine_config': asdict(engine.config)})}\n"
