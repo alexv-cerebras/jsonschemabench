@@ -1,10 +1,8 @@
-from time import time
 from dataclasses import dataclass
 import logging
-import stopit
 from functools import cached_property
 import requests
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, Optional
 import json
 
 from core.registry import register_engine
@@ -23,23 +21,14 @@ class LengthExceedError(Exception):
     pass
 
 
-def _send_request(url, method, params=None, headers=None, req_timeout=5):
+def _send_request(url, params=None, headers=None, req_timeout=5):
     try:
-        if method.lower() == "post":
-            # Socket‐level timeout is now 5 s for connect AND read
-            response = requests.post(
-                url,
-                json=params,
-                headers=headers,
-                timeout=req_timeout
-            )
-        else:
-            response = requests.get(
-                url,
-                params=params,
-                headers=headers,
-                timeout=req_timeout
-            )
+        response = requests.post(
+            url,
+            json=params,
+            headers=headers,
+            timeout=req_timeout
+        )
             
     except requests.exceptions.Timeout as te:
         # This triggers if either the connect or read phase took longer than req_timeout
@@ -113,8 +102,7 @@ class CerebrasEngine(Engine[CerebrasConfig]):
     def _generate(self, output: GenerationOutput) -> None:
         try:
             response = _send_request(
-                self.url, 
-                "post", 
+                self.url,
                 params=self._get_payload(output), 
                 headers=self.headers,
                 req_timeout=self.run_timeout
