@@ -108,6 +108,7 @@ def evaluate(
     declared_coverage_list = []
     empirical_coverage_list = []
     categories_coverage_list, categories_coverage_dict = [], {}
+    failed_schemas = {}
 
     for generation_output in outputs:
         generation = generation_output.generation
@@ -139,12 +140,12 @@ def evaluate(
     for i, label in enumerate(empirical_coverage_list):
         for cat in categories_coverage_list[i]:
             categories_coverage_dict[cat] = categories_coverage_dict.get(cat, []) + [label]
+            if not label:
+                failed_schemas[cat] = failed_schemas.get(cat, []) + [outputs[i].schema]
             
     for cat, values in categories_coverage_dict.items():
         categories_coverage_dict[cat] = sum(values) / len(values) if values else 0
         
-    print(categories_coverage_dict)
-
     ttft_list = [
         generation_output.perf_metrics.ttft
         for generation_output in outputs
@@ -185,4 +186,6 @@ def evaluate(
             gct=Metric.from_values(gct_list),
         ),
         Metric.from_values(output_tokens_list),
+        categories_coverage_dict,
+        failed_schemas
     )

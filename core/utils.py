@@ -3,6 +3,7 @@ import sys
 import random
 import string
 import numpy as np
+import json
 from dacite import from_dict
 from omegaconf import OmegaConf
 import matplotlib.pyplot as plt
@@ -89,6 +90,45 @@ def bootstrap(
         sample = random.choices(data, k=len(data))
         samples.append(func(sample))
     return samples
+
+
+def save_scores(
+    declared_coverage: List["Metric"],
+    empirical_coverage: List["Metric"],
+    compliance: List["Metric"],
+    perf_metrics: List["AggregatedPerfMetrics"],
+    output_tokens: List["Metric"],
+    tasks: List[str],
+    output_path: str
+):
+    if not os.path.isdir(output_path):
+        raise ValueError(f"Output path {output_path} is not a directory.")
+    
+    os.makedirs(output_path, exist_ok=True)
+    for task, dc, ec, cl, pm, ot in zip(
+        tasks,
+        declared_coverage,
+        empirical_coverage,
+        compliance,
+        perf_metrics,
+        output_tokens,
+    ):
+        with open(os.path.join(output_path, f"{task}_results.json"), "w") as f:
+            json.dump(
+                {
+                    "task": task,
+                    "declared_coverage": dc.median,
+                    "empirical_coverage": ec.median,
+                    "compliance": cl.median,
+                    "ttft": pm.ttft.median,
+                    "tpot": pm.tpot.median,
+                    "tgt": pm.tgt.median,
+                    "gct": pm.gct.median,
+                    "output_tokens": ot.median,
+                },
+                f,
+                indent=4,
+            )
 
 
 def print_scores(
