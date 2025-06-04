@@ -67,14 +67,20 @@ def bench(
         all_outputs.append(task_outputs)
 
     if save_outputs:
-        if not os.path.exists("outputs"):
-            os.makedirs("outputs")
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        # Navigate two levels up to the "jsonschemabench" directory
+        jsonschemabench_path = os.path.abspath(os.path.join(current_dir, ".."))
+        outputs_path = os.path.join(jsonschemabench_path, "outputs")
+        engine_path = os.path.join(outputs_path, engine.name)
+        
+        if not os.path.exists(outputs_path):
+            os.makedirs(outputs_path)
 
-        if not os.path.exists(f"outputs/{engine.name}"):
-            os.makedirs(f"outputs/{engine.name}")
+        if not os.path.exists(engine_path):
+            os.makedirs(engine_path)
             
-        id: int = len(glob(f"outputs/{engine.name}/*.jsonl"))
-        with open(f"outputs/{engine.name}/{id}.jsonl", "w") as f:
+        id: int = len(glob(f"{engine_path}/*.jsonl"))
+        with open(f"{engine_path}/{id}.jsonl", "w") as f:
             f.write(
                 f"{dumps({'engine': engine.name, 'engine_config': asdict(engine.config)})}\n"
             )
@@ -83,7 +89,7 @@ def bench(
                 for output in outputs:
                     f.write(f"{dumps(asdict(output))}\n")
 
-        print(f"Outputs saved to outputs/{engine.name}/{id}.jsonl")
+        print(f"Outputs saved to {engine_path}/{id}.jsonl")
 
     if close_engine:
         engine.close()
