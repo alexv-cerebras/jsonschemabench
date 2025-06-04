@@ -66,29 +66,6 @@ def bench(
             task_outputs.append(result)
         all_outputs.append(task_outputs)
 
-    compliance = []
-    perf_metrics = []
-    output_tokens = []
-    declared_coverage = []
-    empirical_coverage = []
-    for outputs in all_outputs:
-        dc, ec, cl, pm, ot = evaluate(outputs)
-
-        compliance.append(cl)
-        perf_metrics.append(pm)
-        declared_coverage.append(dc)
-        empirical_coverage.append(ec)
-        output_tokens.append(ot)
-
-    print_scores(
-        declared_coverage,
-        empirical_coverage,
-        compliance,
-        perf_metrics,
-        output_tokens,
-        tasks,
-    )
-
     if save_outputs:
         if not os.path.exists("outputs"):
             os.makedirs("outputs")
