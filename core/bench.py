@@ -1,17 +1,17 @@
 import os
 import sys
-from tqdm import tqdm
-from json import dumps
 from dataclasses import asdict
-from typing import List, Optional, Union
 from glob import glob
+from json import dumps
+from typing import List, Literal, Optional, Union
 
-from core.engine import Engine
-from core.evaluator import evaluate
-from core.types import GenerationOutput
+from tqdm import tqdm
+
 from core.dataset import Dataset, DatasetConfig
-from core.utils import disable_print, nanoid, safe_min, print_scores
-from core.messages import MessagesFormatter, FEW_SHOTS_MESSAGES_FORMATTER
+from core.engine import Engine
+from core.messages import FEW_SHOTS_MESSAGES_FORMATTER, MessagesFormatter
+from core.types import GenerationOutput
+from core.utils import safe_min
 
 
 def bench(
@@ -21,7 +21,7 @@ def bench(
     messages_formatter: Union[
         MessagesFormatter, List[MessagesFormatter]
     ] = FEW_SHOTS_MESSAGES_FORMATTER,
-    hf_token: Optional[str] = None,
+    split: Literal["test", "train", "val"] = "test",
     close_engine: bool = True,
     save_outputs: bool = False,
 ) -> List[List[GenerationOutput]]:
@@ -54,7 +54,7 @@ def bench(
     all_outputs = []
     for task, mf in zip(tasks, messages_formatter):
         task_outputs = []
-        dataset = Dataset(DatasetConfig(task, limit=limit))
+        dataset = Dataset(DatasetConfig(task, limit=limit, split=split))
         for messages, schema in tqdm(
             dataset.iter(mf),
             total=safe_min(len(dataset), limit),
@@ -72,13 +72,13 @@ def bench(
         jsonschemabench_path = os.path.abspath(os.path.join(current_dir, ".."))
         outputs_path = os.path.join(jsonschemabench_path, "outputs")
         engine_path = os.path.join(outputs_path, engine.name)
-        
+
         if not os.path.exists(outputs_path):
             os.makedirs(outputs_path)
 
         if not os.path.exists(engine_path):
             os.makedirs(engine_path)
-            
+
         id: int = len(glob(f"{engine_path}/*.jsonl"))
         with open(f"{engine_path}/{id}.jsonl", "w") as f:
             f.write(

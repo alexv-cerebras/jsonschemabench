@@ -1,0 +1,62 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "WashingtonPost",
+  "dataset_name": "json_schema_bench",
+  "dataset_size": 2710348,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/WashingtonPost/train-00000-of-00001.parquet": {
+      "num_bytes": 310820,
+      "checksum": null
+    },
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/WashingtonPost/val-00000-of-00001.parquet": {
+      "num_bytes": 52839,
+      "checksum": null
+    },
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/WashingtonPost/test-00000-of-00001.parquet": {
+      "num_bytes": 201511,
+      "checksum": null
+    }
+  },
+  "download_size": 565170,
+  "features": {
+    "json_schema": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "unique_id": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 3275518,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 1515799,
+      "num_examples": 74,
+      "dataset_name": "json_schema_bench"
+    },
+    "val": {
+      "name": "val",
+      "num_bytes": 230133,
+      "num_examples": 13,
+      "dataset_name": "json_schema_bench"
+    },
+    "test": {
+      "name": "test",
+      "num_bytes": 964416,
+      "num_examples": 38,
+      "dataset_name": "json_schema_bench"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

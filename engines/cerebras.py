@@ -1,19 +1,21 @@
-from dataclasses import dataclass
-import logging
-from functools import cached_property
-import requests
-from typing import Dict, Any, Optional
 import json
+import logging
+import os
+from dataclasses import dataclass
+from functools import cached_property
+from typing import Any, Dict, Optional
 
-from core.registry import register_engine
+import requests
+
 from core.engine import Engine, EngineConfig
 from core.evaluator import is_json_schema_valid
+from core.registry import register_engine
 from core.types import (
     CompileStatus,
-    DecodingStatus,
-    GenerationOutput,
     CompileStatusCode,
+    DecodingStatus,
     DecodingStatusCode,
+    GenerationOutput,
 )
 
 
@@ -23,30 +25,21 @@ class LengthExceedError(Exception):
 
 def _send_request(url, params=None, headers=None, req_timeout=5):
     try:
-        response = requests.post(
-            url,
-            json=params,
-            headers=headers,
-            timeout=req_timeout
-        )
-            
+        response = requests.post(url, json=params, headers=headers, timeout=req_timeout)
+
     except requests.exceptions.Timeout as te:
         # This triggers if either the connect or read phase took longer than req_timeout
         logging.error("HTTP request timed out: %r", te)
         raise
-    
+
     if response.status_code != 200:
         logging.error(
-            "Request failed (status %s): %r",
-            response.status_code,
-            response.text
+            "Request failed (status %s): %r", response.status_code, response.text
         )
-        
+
         code = json.loads(response.text)["code"]
         if code == "context_length_exceeded":
-            raise LengthExceedError(
-                "The request exceeded the maximum context length."
-            )
+            raise LengthExceedError("The request exceeded the maximum context length.")
         raise Exception(f"HTTP {response.status_code} → {response.text}")
 
     return response.json()
@@ -66,32 +59,31 @@ class CerebrasEngine(Engine[CerebrasConfig]):
 
     def __init__(
         self,
-        config: CerebrasConfig
+        config: CerebrasConfig,
     ):
         super().__init__(config)
         self.url = (
-            f"{self.config.base_url}/chat/completions" if self.config.base_url.endswith("/v1")
+            f"{self.config.base_url}/chat/completions"
+            if self.config.base_url.endswith("/v1")
             else f"{self.config.base_url}/v1/chat/completions"
         )
         self.run_timeout = self.config.run_timeout or 5
-    
+        self.api_key = os.getenv("CEREBRAS_API_KEY")
+
     @property
     def headers(self):
-        headers = {
-            "Content-Type": "application/json"
-        }
+        headers = {"Content-Type": "application/json"}
+        if self.api_key:
+            headers["Authorization"] = f"Bearer {self.api_key}"
         return headers
-    
+
     def _get_payload(self, output: GenerationOutput):
         payload = {
             "model": self.config.model,
             "messages": output.messages,
             "response_format": {
                 "type": "json_schema",
-                "json_schema": {
-                    "schema": output.schema,
-                    "name": "json_schema"
-                }
+                "json_schema": {"schema": output.schema, "name": "json_schema"},
             },
             "include_internal": True,
             "temperature": self.config.temperature,
@@ -103,9 +95,9 @@ class CerebrasEngine(Engine[CerebrasConfig]):
         try:
             response = _send_request(
                 self.url,
-                params=self._get_payload(output), 
+                params=self._get_payload(output),
                 headers=self.headers,
-                req_timeout=self.run_timeout
+                req_timeout=self.run_timeout,
             )
         except requests.exceptions.Timeout as e:
             output.metadata.compile_status = CompileStatus(
@@ -125,11 +117,14 @@ class CerebrasEngine(Engine[CerebrasConfig]):
             )
             logging.error(f"Error during generation: {e}")
             return
-        
+
         # Time to first token in s
         output.perf_metrics.ttft = response["time_info"]["prompt_time"]
         # Time per output token in ms
-        output.perf_metrics.tpot = (response["time_info"]["completion_time"]/response["usage"]["completion_tokens"]) * 1000
+        output.perf_metrics.tpot = (
+            response["time_info"]["completion_time"]
+            / response["usage"]["completion_tokens"]
+        ) * 1000
         # Total generation time in s
         output.perf_metrics.tgt = response["time_info"]["completion_time"]
         # Grammar compilation time in s
@@ -157,9 +152,11 @@ class CerebrasEngine(Engine[CerebrasConfig]):
     def max_context_length(self):
         return self.config.max_tokens
 
+
 def add_root_type_if_missing(schema: dict):
     if "type" not in schema:
         schema["type"] = "object"
+
 
 def recursively_set_additional_properties_false(schema: dict):
     if not isinstance(schema, dict):

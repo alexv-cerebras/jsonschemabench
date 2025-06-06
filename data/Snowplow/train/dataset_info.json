@@ -1,0 +1,62 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "Snowplow",
+  "dataset_name": "json_schema_bench",
+  "dataset_size": 1613804,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/Snowplow/train-00000-of-00001.parquet": {
+      "num_bytes": 199665,
+      "checksum": null
+    },
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/Snowplow/val-00000-of-00001.parquet": {
+      "num_bytes": 29011,
+      "checksum": null
+    },
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/Snowplow/test-00000-of-00001.parquet": {
+      "num_bytes": 69601,
+      "checksum": null
+    }
+  },
+  "download_size": 298277,
+  "features": {
+    "json_schema": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "unique_id": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 1912081,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 1135266,
+      "num_examples": 242,
+      "dataset_name": "json_schema_bench"
+    },
+    "val": {
+      "name": "val",
+      "num_bytes": 116887,
+      "num_examples": 40,
+      "dataset_name": "json_schema_bench"
+    },
+    "test": {
+      "name": "test",
+      "num_bytes": 361651,
+      "num_examples": 121,
+      "dataset_name": "json_schema_bench"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

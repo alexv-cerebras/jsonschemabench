@@ -1,0 +1,62 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "JsonSchemaStore",
+  "dataset_name": "json_schema_bench",
+  "dataset_size": 22195651,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/JsonSchemaStore/train-00000-of-00001.parquet": {
+      "num_bytes": 2021345,
+      "checksum": null
+    },
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/JsonSchemaStore/val-00000-of-00001.parquet": {
+      "num_bytes": 243913,
+      "checksum": null
+    },
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/JsonSchemaStore/test-00000-of-00001.parquet": {
+      "num_bytes": 1754708,
+      "checksum": null
+    }
+  },
+  "download_size": 4019966,
+  "features": {
+    "json_schema": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "unique_id": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 26215617,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 10125701,
+      "num_examples": 295,
+      "dataset_name": "json_schema_bench"
+    },
+    "val": {
+      "name": "val",
+      "num_bytes": 956294,
+      "num_examples": 49,
+      "dataset_name": "json_schema_bench"
+    },
+    "test": {
+      "name": "test",
+      "num_bytes": 11113656,
+      "num_examples": 148,
+      "dataset_name": "json_schema_bench"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

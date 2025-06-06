@@ -1,0 +1,62 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "Kubernetes",
+  "dataset_name": "json_schema_bench",
+  "dataset_size": 25623424,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/Kubernetes/train-00000-of-00001.parquet": {
+      "num_bytes": 4025911,
+      "checksum": null
+    },
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/Kubernetes/val-00000-of-00001.parquet": {
+      "num_bytes": 612327,
+      "checksum": null
+    },
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/Kubernetes/test-00000-of-00001.parquet": {
+      "num_bytes": 2181186,
+      "checksum": null
+    }
+  },
+  "download_size": 6819424,
+  "features": {
+    "json_schema": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "unique_id": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 32442848,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 14890756,
+      "num_examples": 639,
+      "dataset_name": "json_schema_bench"
+    },
+    "val": {
+      "name": "val",
+      "num_bytes": 2302680,
+      "num_examples": 105,
+      "dataset_name": "json_schema_bench"
+    },
+    "test": {
+      "name": "test",
+      "num_bytes": 8429988,
+      "num_examples": 320,
+      "dataset_name": "json_schema_bench"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

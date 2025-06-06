@@ -1,0 +1,62 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "Glaiveai2K",
+  "dataset_name": "json_schema_bench",
+  "dataset_size": 1440707,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/Glaiveai2K/train-00000-of-00001.parquet": {
+      "num_bytes": 168928,
+      "checksum": null
+    },
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/Glaiveai2K/val-00000-of-00001.parquet": {
+      "num_bytes": 30177,
+      "checksum": null
+    },
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/Glaiveai2K/test-00000-of-00001.parquet": {
+      "num_bytes": 85159,
+      "checksum": null
+    }
+  },
+  "download_size": 284264,
+  "features": {
+    "json_schema": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "unique_id": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 1724971,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 865155,
+      "num_examples": 1026,
+      "dataset_name": "json_schema_bench"
+    },
+    "val": {
+      "name": "val",
+      "num_bytes": 140175,
+      "num_examples": 168,
+      "dataset_name": "json_schema_bench"
+    },
+    "test": {
+      "name": "test",
+      "num_bytes": 435377,
+      "num_examples": 513,
+      "dataset_name": "json_schema_bench"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

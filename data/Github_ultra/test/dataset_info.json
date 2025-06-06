@@ -1,0 +1,62 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "Github_ultra",
+  "dataset_name": "json_schema_bench",
+  "dataset_size": 12235981,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/Github_ultra/train-00000-of-00001.parquet": {
+      "num_bytes": 1260715,
+      "checksum": null
+    },
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/Github_ultra/val-00000-of-00001.parquet": {
+      "num_bytes": 185920,
+      "checksum": null
+    },
+    "hf://datasets/epfl-dlab/JSONSchemaBench@5bd0f4640badc6f3f02df796421d21cb0ca0b141/Github_ultra/test-00000-of-00001.parquet": {
+      "num_bytes": 774820,
+      "checksum": null
+    }
+  },
+  "download_size": 2221455,
+  "features": {
+    "json_schema": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "unique_id": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 14457436,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 7011731,
+      "num_examples": 98,
+      "dataset_name": "json_schema_bench"
+    },
+    "val": {
+      "name": "val",
+      "num_bytes": 1044555,
+      "num_examples": 16,
+      "dataset_name": "json_schema_bench"
+    },
+    "test": {
+      "name": "test",
+      "num_bytes": 4179695,
+      "num_examples": 50,
+      "dataset_name": "json_schema_bench"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

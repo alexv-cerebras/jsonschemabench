@@ -1,13 +1,14 @@
-from json import loads
 from dataclasses import dataclass
-from datasets import load_dataset
-from typing import Callable, Iterator, Tuple, Optional, List
+from json import loads
+from typing import Callable, Iterator, List, Optional, Tuple
 
-from core.types import Schema
+from datasets import load_from_disk
+
 from core.messages import Message, MessagesFormatter
+from core.types import Schema
 
 DATASET_SCHEMA_COLUMN = "json_schema"
-DATASET_HUGGINGFACE_PATH = "epfl-dlab/JSONSchemaBench"
+DATASET_PATH = "data"
 
 DATASET_NAMES = [
     "Github_easy",
@@ -27,8 +28,8 @@ DATASET_NAMES = [
 @dataclass
 class DatasetConfig:
     dataset_name: str
-    hf_token: Optional[str] = None
     limit: Optional[int] = None
+    split: str = "test"  # Default split is 'test', can be overridden
 
 
 class Dataset:
@@ -39,10 +40,9 @@ class Dataset:
             The configuration for the dataset.
         """
         self.config = config
-        self.dataset = load_dataset(
-            path=DATASET_HUGGINGFACE_PATH, name=config.dataset_name, split="test",
-            token=config.hf_token, download_mode="force_redownload"
-        )
+        self.dataset = load_from_disk(f"{DATASET_PATH}/{config.dataset_name}")[
+            config.split
+        ]
 
     def __len__(self):
         return len(self.dataset)
