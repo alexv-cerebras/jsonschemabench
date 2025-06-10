@@ -126,16 +126,17 @@ def save_scores(
                     "declared_coverage": dc.median,
                     "empirical_coverage": ec.median,
                     "compliance": cl.median,
-                    "ttft": pm.ttft.median,
-                    "tpot": pm.tpot.median,
-                    "tgt": pm.tgt.median,
-                    "gct": pm.gct.median,
+                    
+                    "time_to_first_token": pm.time_to_first_token.median,
+                    "time_per_output_token": pm.time_per_output_token.median,
+                    "total_generation_time": pm.total_generation_time.median,
+                    "grammar_compilation_time": pm.grammar_compilation_time.median,
+                    "grammar_overhead_time": pm.grammar_overhead_time.median,
                     "output_tokens": ot.median,
                 },
                 f,
                 indent=4,
             )
-
 
 def print_scores(
     declared_coverage: List["Metric"],
@@ -151,10 +152,11 @@ def print_scores(
         "Declared coverage",
         "Empirical coverage",
         "Compliance",
-        "TTFT (s)",
-        "TPOT (ms)",
-        "TGT (s)",
-        "GCT (s)",
+        "Time to first token (s)",
+        "Time per output token (ms)",
+        "Total generation time (s)",
+        "Grammar compilation time (s)",
+        "Grammar overhead time (s)",
         "Output tokens",
     ]
 
@@ -172,10 +174,11 @@ def print_scores(
             format_metric(dc, details),
             format_metric(ec, details),
             format_metric(cl, details),
-            format_metric(pm.ttft, details),
-            format_metric(pm.tpot, details),
-            format_metric(pm.tgt, details),
-            format_metric(pm.gct, details),
+            format_metric(pm.time_to_first_token, details),
+            format_metric(pm.time_per_output_token, details),
+            format_metric(pm.total_generation_time, details),
+            format_metric(pm.grammar_compilation_time, details),
+            format_metric(pm.grammar_overhead_time, details),
             format_metric(ot, details),
         ]
 

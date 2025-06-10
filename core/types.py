@@ -113,13 +113,13 @@ class PerfMetrics:
         )
         tgt = safe_subtract(end_time, start_time)
         gct = safe_subtract(grammar_compilation_end_time, start_time)
-        prft = safe_subtract(first_token_arrival_time, grammar_compilation_end_time)
+        # prft = safe_subtract(first_token_arrival_time, grammar_compilation_end_time)
         return cls(
-            ttft=ttft,
-            tpot=tpot * 1000 if tpot is not None else None,
-            tgt=tgt,
-            gct=gct,
-            prft=prft,
+            time_to_first_token=ttft,
+            time_per_output_token=tpot * 1000 if tpot is not None else None,
+            total_generation_time=tgt,
+            grammar_compilation_time=gct,
+            # prft=prft,
         )
 
 
@@ -144,11 +144,12 @@ class Metric:
 
 @dataclass
 class AggregatedPerfMetrics:
-    ttft: Metric = field(default_factory=Metric)
-    tpot: Metric = field(default_factory=Metric)
-    tgt: Metric = field(default_factory=Metric)
-    gct: Metric = field(default_factory=Metric)
-    prft: Metric = field(default_factory=Metric)
+    time_to_first_token: Metric = field(default_factory=Metric)
+    time_per_output_token: Metric = field(default_factory=Metric)
+    total_generation_time: Metric = field(default_factory=Metric)
+    grammar_compilation_time: Metric = field(default_factory=Metric)
+    grammar_overhead_time: Metric = field(default_factory=Metric)
+    # prft: Metric = field(default_factory=Metric)
 
 
 @dataclass
