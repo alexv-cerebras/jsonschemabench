@@ -1,19 +1,19 @@
-import numpy as np
+from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Dict, List, Optional
 from uuid import uuid4
-from dataclasses import dataclass, field, fields
-from typing import List, Dict, Any, Optional
+
+import numpy as np
 
 from core.messages import Message
-from core.utils import safe_divide, safe_subtract, safe_reduce
-
+from core.utils import safe_divide, safe_reduce, safe_subtract
 
 Schema = Dict[str, Any]
 
 
 class CompileStatusCode(str, Enum):
-    TBD = "tbd" #-1
-    OK = "ok" #0
+    TBD = "tbd"  # -1
+    OK = "ok"  # 0
     UNSUPPORTED_SCHEMA = "unsupported_schema"
     RUNTIME_GRAMMAR_ERROR = "runtime_grammar_error"
     API_BAD_RESPONSE = "api_bad_response"
@@ -81,15 +81,15 @@ class PerfMetrics:
     """Performance metrics for generation processes."""
 
     # Time to first token in s
-    ttft: Optional[float] = None
+    time_to_first_token: Optional[float] = None
     # Time per output token in ms
-    tpot: Optional[float] = None
+    time_per_output_token: Optional[float] = None
     # Total generation time in s
-    tgt: Optional[float] = None
+    total_generation_time: Optional[float] = None
     # Grammar compilation time in s
-    gct: Optional[float] = None
-    # Prefilling time in s
-    prft: Optional[float] = None
+    grammar_compilation_time: Optional[float] = None
+    # Grammar overhead time in s
+    grammar_overhead_time: Optional[float] = None
     # Peak memory in MB
     peak_memory: Optional[float] = None
 

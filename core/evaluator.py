@@ -136,8 +136,10 @@ def evaluate(
 
         empirical_coverage_list.append(1)
         output_tokens_list.append(generation_output.token_usage.output_tokens)
-        
+    
+    # Aggregate empirical coverage by categories  
     for i, label in enumerate(empirical_coverage_list):
+        # for each category we want to store the empirical coverage and failed schemas
         for cat in categories_coverage_list[i]:
             categories_coverage_dict[cat] = categories_coverage_dict.get(cat, []) + [label]
             if not label:
@@ -147,24 +149,30 @@ def evaluate(
         categories_coverage_dict[cat] = sum(values) / len(values) if values else 0
         
     ttft_list = [
-        generation_output.perf_metrics.ttft
+        generation_output.perf_metrics.time_to_first_token
         for generation_output in outputs
-        if generation_output.perf_metrics.ttft is not None
+        if generation_output.perf_metrics.time_to_first_token is not None
     ]
     tpot_list = [
-        generation_output.perf_metrics.tpot
+        generation_output.perf_metrics.time_per_output_token
         for generation_output in outputs
-        if generation_output.perf_metrics.tpot is not None
+        if generation_output.perf_metrics.time_per_output_token is not None
     ]
     tgt_list = [
-        generation_output.perf_metrics.tgt
+        generation_output.perf_metrics.total_generation_time
         for generation_output in outputs
-        if generation_output.perf_metrics.tgt is not None
+        if generation_output.perf_metrics.total_generation_time is not None
     ]
     gct_list = [
-        generation_output.perf_metrics.gct
+        generation_output.perf_metrics.grammar_compilation_time
         for generation_output in outputs
-        if generation_output.perf_metrics.gct is not None
+        if generation_output.perf_metrics.grammar_compilation_time is not None
+    ]
+    
+    got_list = [
+        generation_output.perf_metrics.grammar_overhead_time
+        for generation_output in outputs
+        if generation_output.perf_metrics.grammar_overhead_time is not None
     ]
 
     compliance_list = [
@@ -180,10 +188,11 @@ def evaluate(
         Metric.from_values(ec_mean_list),
         Metric.from_values(c_mean_list),
         AggregatedPerfMetrics(
-            ttft=Metric.from_values(ttft_list),
-            tpot=Metric.from_values(tpot_list),
-            tgt=Metric.from_values(tgt_list),
-            gct=Metric.from_values(gct_list),
+            time_to_first_token=Metric.from_values(ttft_list),
+            time_per_output_token=Metric.from_values(tpot_list),
+            total_generation_time=Metric.from_values(tgt_list),
+            grammar_compilation_time=Metric.from_values(gct_list),
+            grammar_overhead_time=Metric.from_values(got_list),
         ),
         Metric.from_values(output_tokens_list),
         categories_coverage_dict,
