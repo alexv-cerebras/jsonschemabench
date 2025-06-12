@@ -23,7 +23,9 @@ class LengthExceedError(Exception):
     pass
 
 
-def _send_request(session: requests.Session, url: str, params=None, headers=None, req_timeout=5):
+def _send_request(
+    session: requests.Session, url: str, params=None, headers=None, req_timeout=5
+):
     try:
         response = session.post(url, json=params, headers=headers, timeout=req_timeout)
 
@@ -50,6 +52,7 @@ class CerebrasConfig(EngineConfig):
     model: str
     base_url: str
     max_tokens: int
+    strict: bool = False
     temperature: Optional[float] = None
     run_timeout: Optional[int] = None
 
@@ -70,7 +73,7 @@ class CerebrasEngine(Engine[CerebrasConfig]):
         self.run_timeout = self.config.run_timeout or 5
         self.api_key = os.getenv("CEREBRAS_API_KEY")
         self.session = self._init_session()
-        
+
     def _init_session(self) -> requests.Session:
         session = requests.Session()
         session.headers.update(self.headers)
@@ -89,7 +92,11 @@ class CerebrasEngine(Engine[CerebrasConfig]):
             "messages": output.messages,
             "response_format": {
                 "type": "json_schema",
-                "json_schema": {"schema": output.schema, "name": "json_schema"},
+                "json_schema": {
+                    "schema": output.schema,
+                    "name": "json_schema",
+                    "strict": self.config.strict,
+                },
             },
             "include_internal": True,
             "temperature": self.config.temperature,
@@ -133,11 +140,17 @@ class CerebrasEngine(Engine[CerebrasConfig]):
             / response["usage"]["completion_tokens"]
         ) * 1000
         # Total generation time in s
-        output.perf_metrics.total_generation_time = response["time_info"]["completion_time"]
+        output.perf_metrics.total_generation_time = response["time_info"][
+            "completion_time"
+        ]
         # Grammar compilation time in s
-        output.perf_metrics.grammar_compilation_time = response["usage"]["constraint_manager_compile_time"]
+        output.perf_metrics.grammar_compilation_time = response["usage"][
+            "constraint_manager_compile_time"
+        ]
         # Prefilling time in s
-        output.perf_metrics.grammar_overhead_time = response["usage"]["grammar_overhead_time"]
+        output.perf_metrics.grammar_overhead_time = response["usage"][
+            "grammar_overhead_time"
+        ]
         # output.perf_metrics.prft = response["usage"]["grammar_overhead_time"]
 
         output.token_usage.output_tokens = response["usage"]["completion_tokens"]
